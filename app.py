@@ -12,7 +12,7 @@ class TinkerApp(tk.Frame):
         self.variable = VariableHandler()
         self.variable.set_calculator(self.calculator)
         self.reporter = ReportGenerator()
-        self.random_declarations = DeclarationGenerator()
+        self.declaration_process = DeclarationGenerator()
 
         super().__init__(master)
         self.master = master
@@ -91,7 +91,7 @@ class TinkerApp(tk.Frame):
         template = self.template_entry.get("1.0", tk.END)
         variable = self.variable_entry.get("1.0", tk.END)
 
-        data = self.variable.get_result(variable)
+        data = self.variable.get_result(self.declaration_process.process(variable))
         self.variable_ds_text.delete(1.0, tk.END)
         self.variable_ds_text.insert(1.0, data)
 
@@ -102,7 +102,7 @@ class TinkerApp(tk.Frame):
 
     def get_declarations(self):
         text = self.declaration_struct_entry.get("1.0", tk.END)
-        declarations = self.random_declarations.generate(text)
+        declarations = self.declaration_process.process(text)
 
         self.declarations_entry.delete(1.0, tk.END)
         self.declarations_entry.insert(1.0, declarations)

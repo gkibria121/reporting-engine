@@ -56,7 +56,7 @@ class FunctionSolver:
 
                 if match[2]!= '':
 
-                    eval(f" self.function.update_data(self.function.data{match[2]})")
+                    eval(f" self.function.update_data('{match[2]}')")
 
             value = re.sub(re.escape(s_obj[0])+r'(?=\s|\b|$)',str(self.function.data),value)
 

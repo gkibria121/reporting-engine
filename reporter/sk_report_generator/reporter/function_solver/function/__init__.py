@@ -9,8 +9,15 @@ class Function:
     def set_data(self,data):
         self.data = data
 
-    def update_data(self,data):
-        self.data = data
+    def update_data(self,condition):
+        if type(self.data) == list:
+            self.data = eval(f'self.data{condition}')
+        elif type(self.data) == dict and re.sub(r'[\[\]]','',condition).isdigit():
+            self.data = list(self.data.keys())
+            self.data = eval(f'self.data{condition}')
+        else:
+            self.data = eval(f"self.data{condition}")
+
 
 
     def sum(self,condition=None):
@@ -119,3 +126,12 @@ class Function:
                         temp.add(eval(match[2]))
 
                     self.data= temp
+
+    def slice(self,condition):
+        if len(condition) == 1 :
+            condition = condition+','
+        if condition == '-1':
+            condition = ',,'+condition
+        args = condition.replace(',',':')
+        exec(f"self.data = self.data[{args}]")
+

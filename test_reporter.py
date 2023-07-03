@@ -178,6 +178,21 @@ class TestGetValues(unittest.TestCase):
         report = self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
+        template = '''{{$x.slice(1)}}'''
+        expected_report='''[2, 3, 4, 5, 6, 7]'''
+        report = self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x.slice(1,5)}}'''
+        expected_report='''[2, 3, 4, 5]'''
+        report = self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x.slice(-1)}}'''
+        expected_report='''[7, 6, 5, 4, 3, 2, 1]'''
+        report = self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
     def test_scripts(self):
         data = {'$table': [{'id': 1, 'first_name': 'John', 'last_name': 'Doe', 'age': 30, 'department': 'Sales', 'salary': 50000.0, 'hire_date': '2020-01-15'}, {'id': 2, 'first_name': 'Jane', 'last_name': 'Smith', 'age': 35, 'department': 'HR', 'salary': 60000.0, 'hire_date': '2019-05-20'}, {'id': 3, 'first_name': 'Michael', 'last_name': 'Johnson', 'age': 28, 'department': 'IT', 'salary': 55000.0, 'hire_date': '2021-03-10'}, {'id': 4, 'first_name': 'Sarah', 'last_name': 'Williams', 'age': 32, 'department': 'Marketing', 'salary': 58000.0, 'hire_date': '2018-09-01'}, {'id': 5, 'first_name': 'David', 'last_name': 'Brown', 'age': 29, 'department': 'Finance', 'salary': 52000.0, 'hire_date': '2022-02-28'}]}
         template = '''<><<{{$table[0].id}}>> </>'''
@@ -255,6 +270,130 @@ for item in {{$table}}:
         expected_report = '12345##'
         report = self.reporter.generate_report(template, data)
         self.assertEqual(report, expected_report)
+
+        # Test case 4: Left alignment with width of 7 and fill character '#'
+        data = {'$person': {'name' : 'kibria','age' : 23 , 'city' : 'Dhaka', 'country'  : 'Bangladesh'}}
+
+        template = '''<>
+for key,value in {{$person}}.items():
+    <<{key:<10} : {value:<10}>>
+</>'''
+        expected_report ='name       : kibria    \nage        : 23        \ncity       : Dhaka     \ncountry    : Bangladesh'
+        report = self.reporter.generate_report(template, data)
+        self.assertEqual(report, expected_report)
+
+        data = {'$person': {'name' : 'kibria','age' : 23 , 'city' : 'Dhaka', 'country'  : 'Bangladesh'}}
+        template = '''
+{{$person[0]:<10}} : {{$person.name:<10}}{{$person[1]:<10}} : {{$person.age:<10}}
+{{$person[2]:<10}} : {{$person.city:<10}}{{$person[3]:<10}} : {{$person.country:<10}}
+'''
+        self.assertEqual(report, expected_report)
+        expected_report ='\nname       : kibria    age        : 23        \ncity       : Dhaka     country    : Bangladesh\n'
+        report = self.reporter.generate_report(template, data)
+        self.assertEqual(report, expected_report)
+
+
+        data ={
+              "$name": "Kibria",
+              "$email": "gkibria121@gmail.com",
+              "$address": "123 Main Street",
+              "$city": "New York",
+              "$state": "NY",
+              "$zip": "10001",
+              "$phone": "555-123-4567",
+              "$date": "July 3, 2023",
+              "$recipientName": "John Smith",
+              "$recipientPosition": "Human Resources Manager",
+              "$organizationName": "XYZ Corporation",
+              "$organizationAddress": "456 Oak Avenue",
+              "$startDate": "July 10, 2023",
+              "$endDate": "July 20, 2023",
+              "$reason": "Family emergency",
+              "$numberOfDays" : 11
+            }
+
+        template = '''
+{{$name}}
+{{$address}}
+{{$city}}, {{$state}}, {{$zip}}
+{{$email}}
+{{$phone}}
+{{$date}}
+
+{{$recipientName}}
+{{$recipientPosition}}
+{{$organizationName}}
+{{$organizationAddress}}
+{{$city}}, {{$state}}, {{$zip}}
+
+Dear {{$recipientName}},
+
+I hope this letter finds you in good health. I am writing to formally request a leave of absence from {{$startDate}} to {{$endDate}}, as I require some personal time off. I apologize for any inconvenience this may cause and assure you that I have made arrangements to minimize the impact on my work and colleagues.
+
+During my absence, I will make every effort to complete all pending tasks and delegate responsibilities to a trusted colleague to ensure a smooth workflow. I will also provide detailed instructions and contact information to be available for any urgent matters that may arise during my absence.
+
+The reason for my leave is {{$reason}}. I understand the importance of my presence at work, but given the circumstances, it is essential for me to take this leave to address the situation properly.
+
+I have reviewed the company's leave policy and believe I am entitled to {{$numberOfDays}} days of paid/unpaid leave. I would appreciate it if you could confirm this and provide any additional instructions or documentation required to process my leave request.
+
+Please let me know if there are any specific procedures I need to follow or if there are any forms I should complete to initiate the leave request. I am more than willing to comply with any requirements and provide any necessary documentation to support my request.
+
+I understand the impact of my absence on the team and the work at hand, and I will do my best to minimize any disruption. I am confident that my colleagues will be able to handle any urgent matters during my absence, and I will make sure to be available remotely if needed.
+
+Thank you for your understanding and support in this matter. I value my position within the company and the opportunities it has provided me. I will be more than happy to discuss my leave further or provide any additional information you may require.
+
+I look forward to your positive response and to returning to work rejuvenated and fully committed to my responsibilities.
+
+Thank you once again for your attention to this matter.
+
+Sincerely,
+
+{{$name}}'''
+
+        expected_report ='''
+Kibria
+123 Main Street
+New York, NY, 10001
+gkibria121@gmail.com
+555-123-4567
+July 3, 2023
+
+John Smith
+Human Resources Manager
+XYZ Corporation
+456 Oak Avenue
+New York, NY, 10001
+
+Dear John Smith,
+
+I hope this letter finds you in good health. I am writing to formally request a leave of absence from July 10, 2023 to July 20, 2023, as I require some personal time off. I apologize for any inconvenience this may cause and assure you that I have made arrangements to minimize the impact on my work and colleagues.
+
+During my absence, I will make every effort to complete all pending tasks and delegate responsibilities to a trusted colleague to ensure a smooth workflow. I will also provide detailed instructions and contact information to be available for any urgent matters that may arise during my absence.
+
+The reason for my leave is Family emergency. I understand the importance of my presence at work, but given the circumstances, it is essential for me to take this leave to address the situation properly.
+
+I have reviewed the company's leave policy and believe I am entitled to 11 days of paid/unpaid leave. I would appreciate it if you could confirm this and provide any additional instructions or documentation required to process my leave request.
+
+Please let me know if there are any specific procedures I need to follow or if there are any forms I should complete to initiate the leave request. I am more than willing to comply with any requirements and provide any necessary documentation to support my request.
+
+I understand the impact of my absence on the team and the work at hand, and I will do my best to minimize any disruption. I am confident that my colleagues will be able to handle any urgent matters during my absence, and I will make sure to be available remotely if needed.
+
+Thank you for your understanding and support in this matter. I value my position within the company and the opportunities it has provided me. I will be more than happy to discuss my leave further or provide any additional information you may require.
+
+I look forward to your positive response and to returning to work rejuvenated and fully committed to my responsibilities.
+
+Thank you once again for your attention to this matter.
+
+Sincerely,
+
+Kibria'''
+        report = self.reporter.generate_report(template, data)
+        self.assertEqual(report, expected_report)
+
+
+
+
+
 
 if __name__ == '__main__':
     unittest.main()

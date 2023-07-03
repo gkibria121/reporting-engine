@@ -5,9 +5,10 @@ class DeclarationGenerator:
 
     def __init__(self):
         self.reandom_value = RandomValue()
+        self.functions = self.reandom_value.functions
 
 
-    def generate(self,template):
+    def process(self,template):
 
         declaraion_list = self.get_declaration_list(template)
 
@@ -37,12 +38,14 @@ class DeclarationGenerator:
             value = expression
 
             for function_call in functions:
-                function,arguments = function_call
+                if function_call[0] in self.functions or function_call[0]=='random_data':
 
-                result  = eval(f"self.reandom_value.{function}{arguments}")
-                pattern = re.escape(function)+r'(\s|\b)*'+re.escape(arguments)
+                    function,arguments = function_call
 
-                value = re.sub(pattern,str(result),expression)
+                    result  = eval(f"self.reandom_value.{function}{arguments}")
+                    pattern = re.escape(function)+r'(\s|\b)*'+re.escape(arguments)
+
+                    value = re.sub(pattern,str(result),expression)
 
             temp += [(variable,value)]
         return temp
@@ -50,11 +53,15 @@ class DeclarationGenerator:
     def process_list(self,declaration_list):
         declarations_text =''
         for variable,expression in declaration_list:
-            if '$' not in variable:
-                variable = '$'+variable
-            if ';' not in expression:
-                expression = expression+';'
-            declarations_text += f"{variable} = {expression}\n"
+            variable = variable if variable.startswith('$')  else '$'+variable
+
+            for v,e in declaration_list:
+                v = v.replace('$','') if v.startswith('$')  else v
+                expression = re.sub(r'(?=\b|\s|^)([^\$])'+re.escape(v)+r'(?=\b|\s|$)',f'${v}',expression)
+
+
+
+            declarations_text += f"{variable} = {expression};\n"
         return declarations_text
     def get_help(self):
 

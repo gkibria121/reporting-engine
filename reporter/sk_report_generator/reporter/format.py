@@ -7,7 +7,7 @@ class Formatter(IReporter):
         self.successor = None
 
     def report(self, template):
-        format_pattern = r'(?![}])(\{(\{((?:[^{}]|(?2))*)\:([^{}]*)\})\})(?![}])'
+        format_pattern = r'(?![}])(\{(\{((?:[^{}]|(?2))*)\:([^{}()[]*)\})\})(?![}])'
 
 
 
