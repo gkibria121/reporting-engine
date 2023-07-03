@@ -204,5 +204,57 @@ for item in {{$table}}:
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
+    def test_alignment(self):
+        data = {'$x' : 1}
+        template = '''{{$x :b}}'''
+        expected_report ='1'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x' : 1}
+        template = '''{{$x :>5}}'''
+        expected_report ='    1'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x' : 1}
+        template = '''{{$x :^5}}'''
+        expected_report ='  1  '
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x' : 1}
+        template = '''{{$x :<5}}'''
+        expected_report ='1    '
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+        # Test case 1: Left alignment with width of 10
+        data = {'$x': 123}
+        template = '''{{$x :<10}}'''
+        expected_report = '123       '
+        report = self.reporter.generate_report(template, data)
+        self.assertEqual(report, expected_report)
+
+        # Test case 2: Right alignment with width of 8 and fill character '0'
+        data = {'$x': 123}
+        template = '''{{$x :0>8}}'''
+        expected_report = '00000123'
+        report = self.reporter.generate_report(template, data)
+        self.assertEqual(report, expected_report)
+
+        # Test case 3: Center alignment with width of 6 and fill character '-'
+        data = {'$x': 12}
+        template = '''{{$x :-^6}}'''
+        expected_report = '--12--'
+        report = self.reporter.generate_report(template, data)
+        self.assertEqual(report, expected_report)
+
+        # Test case 4: Left alignment with width of 7 and fill character '#'
+        data = {'$x': 12345}
+        template = '''{{$x :#<7}}'''
+        expected_report = '12345##'
+        report = self.reporter.generate_report(template, data)
+        self.assertEqual(report, expected_report)
+
 if __name__ == '__main__':
     unittest.main()

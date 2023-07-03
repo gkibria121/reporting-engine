@@ -7,27 +7,27 @@ class Formatter(IReporter):
         self.successor = None
 
     def report(self, template):
-        format_pattern = r'(?<=[^\{]\{\{)[^{}]+:[^{}]+(?=\}\}[^\}])'
+        format_pattern = r'(?![}])(\{(\{((?:[^{}]|(?2))*)\:([^{}]*)\})\})(?![}])'
+
+
+
+
+
         matches = re.findall(format_pattern, template)
 
         for match in matches:
+            value = match[2]
+            format_spec      = match[3]
 
-            value, formula = match.replace(' ', '').split(':')
-            try:
-                value = eval(value)
-                formula = formula
-                replacement = format(value, formula)
+            if re.sub(r'[\s\.\,]','',value).isdigit():
+                value = int(value) if value.endswith('.0') or '.' not in value else float(value)
 
-            except ValueError as error:
-                error_message = str(error)
-                replacement = f'({value}, {error_message})'
+            replacement = format(value,format_spec)
 
-            except TypeError as error:
-                error_message = str(error)
-                replacement = f'({value}, {error_message})'
 
-            pattern = r'({{)\s*' + re.escape(match) + '\s*(}})'
-            template = re.sub(pattern, replacement, template)
+            pattern =r'({)\s*'+re.escape(match[1])+r'\s*(})'
+            template = re.sub(pattern, replacement , template)
+
 
         return self.successor.report(template)
 
