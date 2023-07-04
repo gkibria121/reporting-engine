@@ -1,13 +1,8 @@
-
-befor start install the packages by clicking install.cmd
-
-
-
 Variable Declaration:
 
-1. Variables must start with the symbol '$', and their values can be expressions that will be evaluated.
+1. Variables can start with the symbol '$', and you can use variables in the expression of other variables.
 2. Expressions can use previously assigned variables, allowing for recursive operations.
-3. Variables can be declared with values of any type, including objects and lists. To include expression values within an object, the 'eval()' function should be used. For example: `$list = [eval(1+2),'1+2']`.
+3. Variables can be declared with values of any type, including objects and lists. To include expression values within an object, the 'eval()' function should be used. For example: `list = [eval(1+2),'1+2']`.
 4. Previously assigned variables can be used within lists or objects.
 5. Table data can be inserted into a variable using JSON format.
 6. Comments can be added using '#' for single-line comments and '/* ... */' for multiple lines.

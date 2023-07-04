@@ -2,7 +2,7 @@ from .reporter.default import Default
 from .reporter.format import Formatter
 from .reporter.script import ScriptEvaluator
 from .reporter.function import FunctionEvaluator
-
+import regex as re
 
 class ReportGenerator:
 
@@ -20,7 +20,6 @@ class ReportGenerator:
 
     def generate_report(self, template, data):
         self.set_data(data)
-
         result = self.function_evaluate.report(template)
         return result
 
@@ -29,4 +28,6 @@ class ReportGenerator:
         self.function_evaluate.set_data(self.data)
         self.script_evaluate.set_data(self.data)
         self.format.set_data(self.data)
+
+
 
