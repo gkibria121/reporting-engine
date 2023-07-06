@@ -1,5 +1,5 @@
 import regex as re
-from .function_solver import FunctionSolver
+from .function_solver.function_solver import FunctionSolver
 from .base import IReporter
 
 

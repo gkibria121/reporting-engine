@@ -1,5 +1,5 @@
 import regex as re
-from .function import Function
+from .function.function import Function
 
 class FunctionSolver:
     def __init__(self):
@@ -61,7 +61,16 @@ class FunctionSolver:
             value = re.sub(re.escape(s_obj[0])+r'(?=\s|\b|$)',str(self.function.data),value)
 
 
-        return value
+        pattern = r'eval(\((?>[^()]|(?1))*\))'
+        matches = re.findall(pattern,value)
+        result = value
+        for match in matches:
+            value = eval(match)
+            result = re.sub(r'eval\s*'+re.escape(match),str(value),result)
+
+
+
+        return result
 
 
     def process_function_calling(self,function_calling):
