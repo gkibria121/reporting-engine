@@ -1,6 +1,7 @@
 from .base import IReporter
 from .formatter.floor import Floor
 from .formatter.ceil import Ceil
+from .formatter.width import WidthHandler
 from .formatter.default import Default
 import regex as re
 
@@ -11,6 +12,7 @@ class Formatter(IReporter):
         self.floor = Floor()
         self.ceil = Ceil()
         self.default = Default()
+        self.width_handler = WidthHandler()
 
 
 
@@ -31,11 +33,10 @@ class Formatter(IReporter):
                replacement = format(value,format_spec)
             except ValueError:
 
-                condition,format_spec_list = self.process(format_spec)
-                result = ''
-
-                for format_spec in format_spec_list:
-                    result = self.floor.format(value,condition,format_spec)
+                condition,format_specs = self.process(format_spec)
+                format_pattern = '{{value}:{fill}{align}{sign}{pad}{width}{grouping_option}{precision}{type}}'
+                resutl = self.width_handler.handle(value,condition,format_specs,format_pattern)
+##                self.floor.format()
 
                 replacement = ''
 
@@ -51,20 +52,25 @@ class Formatter(IReporter):
         self.floor.set_successor(self.ceil)
         self.ceil.set_successor(self.default)
 
+
+        self.width_handler.set_successor(self.default)
+
     def set_data(self, data):
         pass
 
 
     def process(self,format_spec):
-
+        format_list = {'f2': {'fill' : '0' , 'align' : 'left', 'sign': '+', 'pad' : '0' ,'width' : 10, 'grouping_option' : ',' ,'precision' : '.1' ,'type' : 'b'} ,'w2' :{'width' : 10}}
         matches = re.split(',',format_spec)
         condition = re.search(r'c(\(((?>[^()]+|(?1))*)\))',format_spec)
+
         format_spec_list = matches
+        format_specs = {}
         if condition:
             condition = condition[2]
-
             format_spec_list = matches[1:]
+        for key in format_spec_list:
+            format_specs.update(format_list[key])
 
 
-
-        return condition,format_spec_list
+        return condition,format_specs

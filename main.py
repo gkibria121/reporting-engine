@@ -28,8 +28,8 @@ Controller = Controller()
 
 ##data = Controller.get_data(text)
 data = {'$x' : 30}
-template = '''{{$x:b}}  {{$x:c((x)=>x>10),f2,c2}}
-{{$x:f2,c2}}
+template = '''{{$x:c((x)=>x>10),f2,w2}}
+{{$x:f2,w2}}
 '''
 declaration = Controller.get_report(template,data)
 print(declaration)
