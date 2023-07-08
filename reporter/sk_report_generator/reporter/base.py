@@ -25,3 +25,11 @@ class IMethod(ABC):
     @abstractmethod
     def set_successor(self):
         pass
+class IFormatter(ABC):
+
+    @abstractmethod
+    def format(self):
+        pass
+    @abstractmethod
+    def set_successor(self):
+        pass

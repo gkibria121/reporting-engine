@@ -1,5 +1,5 @@
 import regex as re
-
+import math
 
 class Function:
 
@@ -135,3 +135,22 @@ class Function:
         args = condition.replace(',',':')
         exec(f"self.data = self.data[{args}]")
 
+
+    def floor(self,condition):
+
+        if len(condition) ==0:
+
+            self.data = math.floor(self.data)
+
+
+    def ceil(self,condition):
+
+        if len(condition) ==0:
+
+            self.data = math.ceil(self.data)
+
+    def round(self,condition):
+
+        if len(condition) !=0:
+
+            self.data = round(self.data,int(condition))

@@ -21,10 +21,8 @@ class TinkerApp(tk.Frame):
         self.tab_control = tk.ttk.Notebook(self)
 
         self.tab_main = tk.Frame(self.tab_control)
-        self.tab_dummy = tk.Frame(self.tab_control)
 
         self.tab_control.add(self.tab_main, text="Report")
-        self.tab_control.add(self.tab_dummy, text="Create Declarations")
 
         self.variable_label = tk.Label(self.tab_main, text="Declare Variables")
         self.variable_entry = tk.Text(self.tab_main, height=10)
@@ -57,33 +55,6 @@ class TinkerApp(tk.Frame):
         self.rowconfigure(3, weight=1, minsize=20)  # Allow row 2 (report_text) to expand vertically
         self.columnconfigure(2, weight=1)  # Allow column 1 (template_entry and variable_entry) to expand horizontally
 
-        # dummy teb
-
-        self.declaration_struct_label = tk.Label(self.tab_dummy, text="Declaration Structure")
-        self.declaration_struct_entry = tk.Text(self.tab_dummy)
-
-        self.declarations_label = tk.Label(self.tab_dummy, text="Declarations")
-        self.declarations_entry = tk.Text(self.tab_dummy)
-
-        self.help_label = tk.Label(self.tab_dummy, text="Declarations")
-        self.help_entry = tk.Text(self.tab_dummy)
-
-        self.help_label = tk.Label(self.tab_dummy, text="Help")
-        self.help_entry = tk.Text(self.tab_dummy, height=10)
-        self.help_entry.insert(1.0, DeclarationGenerator().get_help())
-
-        self.button = tk.Button(self.tab_dummy, text="Create", command=self.get_declarations, height=2, width=10)
-
-        self.declaration_struct_label.grid(row=0, column=1)
-        self.declaration_struct_entry.grid(row=1, column=1, sticky="ns")  # Set sticky="ns" for vertical expansion
-
-        self.declarations_label.grid(row=0, column=2)
-        self.declarations_entry.grid(row=1, column=2, sticky="ns")  # Set sticky="ns" for vertical expansion
-
-        self.help_label.grid(row=10, column=0, columnspan=3)
-        self.help_entry.grid(row=11, column=0, columnspan=3, sticky="nsew")  # Set sticky="ns" for vertical expansion
-
-        self.button.grid(row=15, column=0, columnspan=3)
         self.tab_control.pack(fill=tk.BOTH, expand=1)
         self.pack()  # Add this line to display the frame
 
@@ -99,13 +70,6 @@ class TinkerApp(tk.Frame):
 
         self.report_text.delete(1.0, tk.END)
         self.report_text.insert(1.0, report)
-
-    def get_declarations(self):
-        text = self.declaration_struct_entry.get("1.0", tk.END)
-        declarations = self.declaration_process.process(text)
-
-        self.declarations_entry.delete(1.0, tk.END)
-        self.declarations_entry.insert(1.0, declarations)
 
 
 def main():

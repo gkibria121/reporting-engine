@@ -408,7 +408,57 @@ Kibria'''
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
+    def test_sign(self):
+        data = {'$x' : 30000}
+        template = '''{{$x:+d}}'''
+        expected_report ='+30000'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
 
+        data = {'$x' : -30000}
+        template = '''{{$x:+d}}'''
+        expected_report ='-30000'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x' : 30.123345}
+        template = '''{{$x:+f}}'''
+        expected_report ='+30.123345'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x' : -30.123345}
+        template = '''{{$x:+f}}'''
+        expected_report ='-30.123345'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+
+    def test_round(self):
+        data = {'$x' : 30.123345}
+        template = '''{{$x.round(2)}}'''
+        expected_report ='30.12'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+
+        data = {'$x' : 30.123345}
+        template = '''{{$x.round(4)}}'''
+        expected_report ='30.1233'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x' : 30.1299999}
+        template = '''{{$x.round(3)}}'''
+        expected_report ='30.13'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x' : 30.1256789}
+        template = '''{{$x.round(4)}}'''
+        expected_report ='30.1257'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
 
 
 if __name__ == '__main__':

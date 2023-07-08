@@ -27,9 +27,9 @@ class Controller:
 Controller = Controller()
 
 ##data = Controller.get_data(text)
-data = {'$x': 3, '$y': 3, '$z': '$x + $y'}
-template = '''{{eval($x+$y)}}+{{$z}}'''
+data = {'$x' : 30}
+template = '''{{$x:b}}  {{$x:c((x)=>x>10),f2,c2}}
+{{$x:f2,c2}}
+'''
 declaration = Controller.get_report(template,data)
-
 print(declaration)
-
