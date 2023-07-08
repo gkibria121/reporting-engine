@@ -390,7 +390,23 @@ Kibria'''
         report = self.reporter.generate_report(template, data)
         self.assertEqual(report, expected_report)
 
+    def test_set(self):
 
+        data = {'$set1' : {1,2,3,4,5,6,7} , '$set2' : {5,6,7,8,9,10}, '$set3' : {1,2,3,4,5,6,7,8,9,10}}
+        template = '''{{$set1}}'''
+        expected_report ='{1, 2, 3, 4, 5, 6, 7}'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$set1 - $set2}}'''
+        expected_report ='{1, 2, 3, 4, 5, 6, 7} - {5, 6, 7, 8, 9, 10}'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{eval($set1 - $set2)}}'''
+        expected_report ='{1, 2, 3, 4}'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
 
 
 
