@@ -30,8 +30,7 @@ class Formatter(IReporter):
 
     def report(self, template):
 
-        format_pattern = r'(?![}])(\{(\{((?:[^{}]|(?2))*)\:(.*)\})\})(?![}])'
-##        template, format_class_list = self.get_format_list(template)
+        format_pattern = r'(?![}])(\{(\{((?:[^{}]|(?2))*)\:([^{}]*)\})\})(?![}])'
 
         matches = re.findall(format_pattern, template)
 
@@ -45,6 +44,7 @@ class Formatter(IReporter):
             try:
                 replacement = format(value, format_spec)
             except ValueError:
+                template, format_class_list = self.get_format_list(template)
 
                 condition, format_specs = self.process(format_spec, format_class_list)
                 format_pattern = '{{value}:{fill}{align}{sign}{pad}{width}{grouping_option}{precision}{type}}'
@@ -104,23 +104,4 @@ class Formatter(IReporter):
                 value = format_class[2]
                 format_classes[key] = eval(value)
         template = re.sub(r'\n?<format>([\s\S]*?)<\/format>','',template)
-
-        pattern = r'({{.*?(format\s*=\s*(\{((?:[^{}]|(?3))*)\})).*}})'
-
-        matches = re.findall(pattern,template)
-        i= 0
-        for match in matches:
-            key = f'c{i}'
-            value = match[2]
-            format_classes[key] = eval(value)
-
-            replacement = re.sub(re.escape(match[1]),key,match[0])
-
-            template = re.sub(re.escape(match[0]),replacement,template)
-
-            i = i+1
-
-
-
-
         return template,format_classes
