@@ -1,4 +1,4 @@
-from variable_handler import VariableHandler
+from .variable_handler import VariableHandler
 from sk_calculator import Calculator
 import unittest
 

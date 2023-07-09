@@ -26,10 +26,9 @@ class Controller:
 
 Controller = Controller()
 
-##data = Controller.get_data(text)
-data = {'$x' : 30}
-template = '''{{$x:c((x)=>x>10),f2,w2}}
-{{$x:f2,w2}}
+# data = Controller.get_data(text)
+data = {'$x': 40.6}
+template = '''{{$x:b}}
 '''
-declaration = Controller.get_report(template,data)
+declaration = Controller.get_report(template, data)
 print(declaration)

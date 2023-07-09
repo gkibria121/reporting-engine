@@ -460,6 +460,46 @@ Kibria'''
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
+    def test_format(self):
+
+        data = {'$x': 40.6}
+        template = '''{{$x:c2,fl}}
+<format>
+c2 = {'align': 'center','width': 10, 'fill' : 0}
+fl= {'floor-precision': 2}
+</format>'''
+        expected_report ='40.0'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x': 41.9}
+        template = '''{{$x:fl}}
+<format>
+fl= {'floor-precision': 2}
+</format>'''
+        expected_report ='40.0'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x': 40.6}
+        template = '''{{$x:c2,fl}}
+<format>
+c2 = {'align': 'center','width': 10, 'fill' : 0}
+fl= {'ceil-precision': 2}
+</format>'''
+        expected_report ='42.0'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x': 41.9}
+        template = '''{{$x:fl}}
+<format>
+fl= {'ceil-precision': 2}
+</format>'''
+        expected_report ='42.0'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
 
 if __name__ == '__main__':
     unittest.main()

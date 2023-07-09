@@ -1,13 +1,13 @@
 import unittest
 from ..sk_calculator import Calculator
-class CalculatorTestCase(unittest.TestCase):
 
+
+class CalculatorTestCase(unittest.TestCase):
 
     def setUp(self):
         self.calculator = Calculator()
 
     def test_evaluate(self):
-
         # Test evaluate with complex expression
 
         result = self.calculator.evaluate('200-12/3+3*2*3*7-2+1+2*12-1+7*5')
@@ -21,10 +21,7 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('')
         self.assertEqual(result, 0)
 
-
-
     def test_evaluate_addition(self):
-
         result = self.calculator.evaluate('-1+(-2)')
         self.assertEqual(result, -3)
 
@@ -37,12 +34,7 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('  1   +   2  ')
         self.assertEqual(result, 3)
 
-
-
-
-
     def test_evaluate_subtraction(self):
-
         result = self.calculator.evaluate('5.2-2.2')
         self.assertEqual(result, 3)
 
@@ -53,12 +45,10 @@ class CalculatorTestCase(unittest.TestCase):
         self.assertEqual(result, -7)
 
     def test_evaluate_multiplication(self):
-
         result = self.calculator.evaluate('2*3')
         self.assertEqual(result, 6)
 
     def test_evaluate_division(self):
-
         result = self.calculator.evaluate('6/2')
         self.assertEqual(result, 3)
 
@@ -76,8 +66,6 @@ class CalculatorTestCase(unittest.TestCase):
 
         result = self.calculator.evaluate('0.0/6')
         self.assertEqual(result, 0.0)
-
-
 
         result = self.calculator.evaluate('2/3')
         self.assertAlmostEqual(result, 0.6666666666666666)
@@ -121,7 +109,6 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('+6.0/+2.0')
         self.assertEqual(result, 3)
 
-
         self.assertEqual(result, 3)
 
         result = self.calculator.evaluate('-6.0/2.0')
@@ -130,14 +117,10 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('+6/2')
         self.assertEqual(result, 3)
 
-
-
         result = self.calculator.evaluate('(-6.0)/(2.0+1)')
         self.assertEqual(result, -2.0)
 
-
     def test_evaluate_unary(self):
-
         result = self.calculator.evaluate('+++5.2---2.2')
         self.assertEqual(result, 3)
 
@@ -151,16 +134,11 @@ class CalculatorTestCase(unittest.TestCase):
         self.assertEqual(result, 4)
 
     def test_evaluate_bracket(self):
-
-
-
-
         result = self.calculator.evaluate('(-2)')
         self.assertEqual(result, -2)
 
         result = self.calculator.evaluate('(-2+1)')
         self.assertEqual(result, -1)
-
 
         # Test evaluate brackets with complex expression
         result = self.calculator.evaluate('200-(12/3)+(3*2*3*7)-2+1+(2*12)-1+(7*5)')
@@ -169,7 +147,6 @@ class CalculatorTestCase(unittest.TestCase):
         # Test evaluate with complex expression
         result = self.calculator.evaluate('(2+3+4)-(1+5)')
         self.assertEqual(result, 3)
-
 
         # Test Evaluate brackets with unary operators
 
@@ -190,18 +167,12 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('((2+3)+4)-(1+5)')
         self.assertEqual(result, 3)
 
-        #Test Evaluate Complex Multiple Levels of brackets
+        # Test Evaluate Complex Multiple Levels of brackets
 
         result = self.calculator.evaluate('(200-(12/3))+(3*(2*3)*7)-(2+(1))+(2*12)-1+(7*5)')
         self.assertEqual(result, 377)
 
-
-
-
     def test_evaluate_function(self):
-
-
-
         result = self.calculator.evaluate('sin(0)+cos(0)+tan(0)+cosec(90)+sec(0)+cot(90)')
         self.assertEqual(result, 3)
 
@@ -338,8 +309,6 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('sec(60)')
         self.assertAlmostEqual(result, 2)
 
-
-
         result = self.calculator.evaluate('sec(180)')
         self.assertEqual(result, -1)
 
@@ -381,7 +350,6 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('cot(810)')
         self.assertAlmostEqual(result, 0)
 
-
         result = self.calculator.evaluate('sin(-45)')
         self.assertAlmostEqual(result, -0.7071067812)
 
@@ -411,8 +379,6 @@ class CalculatorTestCase(unittest.TestCase):
 
         ## trigonometric expressions
 
-
-
         result = self.calculator.evaluate('sin(60) + cos(30) - tan(45) + 10')
         self.assertAlmostEqual(result, 10.732050808)
 
@@ -421,7 +387,6 @@ class CalculatorTestCase(unittest.TestCase):
 
         result = self.calculator.evaluate('sin(cos(0+30)) + tan(60) + 5')
         self.assertAlmostEqual(result, 6.747165227)
-
 
         ## complex trigonometric expressions
 
@@ -433,7 +398,6 @@ class CalculatorTestCase(unittest.TestCase):
 
         result = self.calculator.evaluate('(sin(30) + cos(45)) * 2')
         self.assertAlmostEqual(result, 2.41421356237)
-
 
         ## inverse functions
 
@@ -479,10 +443,7 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('cosec(181)')
         self.assertAlmostEqual(result, -57.298688499)
 
-
-
     def test_evaluate_power(self):
-
         result = self.calculator.evaluate('2^2')
         self.assertAlmostEqual(result, 4)
 
@@ -526,9 +487,6 @@ class CalculatorTestCase(unittest.TestCase):
         self.assertEqual(result, 17)
 
     def test_evaluate_square_root(self):
-
-
-
         result = self.calculator.evaluate('sqrt(16)')
         self.assertEqual(result, 4)
 
@@ -581,19 +539,13 @@ class CalculatorTestCase(unittest.TestCase):
         self.assertAlmostEqual(result, 1.76383420738)
 
     def test_evaluate_log(self):
-
         result = self.calculator.evaluate('log(10)')
         self.assertEqual(result, 1)
 
         result = self.calculator.evaluate('log(100)')
         self.assertEqual(result, 2)
 
-
-
-
-
     def test_evaluate(self):
-
         result = self.calculator.evaluate('1+sin(90)+(2*pi)')
         self.assertAlmostEqual(result, 8.283185307179586)
 
@@ -632,8 +584,6 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('sqrt(0)')
         self.assertEqual(result, 0)
 
-
-
     def test_evaluate_exponential(self):
         result = self.calculator.evaluate('exp(1)')
         self.assertAlmostEqual(result, 2.718281828)
@@ -660,8 +610,6 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('log(1)')
         self.assertAlmostEqual(result, 0)
 
-
-
         result = self.calculator.evaluate('log(10)')
         self.assertEqual(result, 1)
 
@@ -672,12 +620,11 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('ln(e)')
         self.assertEqual(result, 1)
 
-        result = self.calculator.evaluate('((3.14 * (2 + 5)) / (sqrt(16) + exp(1))) * (sin(0.5) + log10(100)) - (tan(1.5) + (cosec(0.2) * 2)) ^ (acos(0.3) - log2(8))')
+        result = self.calculator.evaluate(
+            '((3.14 * (2 + 5)) / (sqrt(16) + exp(1))) * (sin(0.5) + log10(100)) - (tan(1.5) + (cosec(0.2) * 2)) ^ (acos(0.3) - log2(8))')
         self.assertAlmostEqual(result, -6.425402723271611e+191)
 
-
     def test_calculator_complex_operations(self):
-
         result = self.calculator.evaluate('sqrt((5 - 3)^2 + 4 * 6) / (exp(2) - 1)')
         self.assertAlmostEqual(result, 0.8282135169901252)
 
@@ -700,7 +647,6 @@ class CalculatorTestCase(unittest.TestCase):
         self.assertAlmostEqual(result, 8089.9733464050005)
 
     def test_degree_radians(self):
-
         result = self.calculator.evaluate('sin(pi/2 radians)')
         self.assertAlmostEqual(result, 1)
 
@@ -713,9 +659,8 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('cos(90 degree)')
         self.assertAlmostEqual(result, 0)
 
-
         result = self.calculator.evaluate('tan(90 degree)')
-        self.assertAlmostEqual(result,['Math Error: tan(90.0) is undefined'])
+        self.assertAlmostEqual(result, ['Math Error: tan(90.0) is undefined'])
 
         result = self.calculator.evaluate('tan(pi/2 radians)')
         self.assertAlmostEqual(result, ['Math Error: tan(1.5707963267948966) is undefined'])
@@ -726,7 +671,7 @@ class CalculatorTestCase(unittest.TestCase):
         self.assertAlmostEqual(result, 1)
 
         result = self.calculator.evaluate('sec(90 degree)')
-        self.assertAlmostEqual(result,['Math Error: sec(90.0) is undefined'])
+        self.assertAlmostEqual(result, ['Math Error: sec(90.0) is undefined'])
 
         result = self.calculator.evaluate('sec(pi/2 radians)')
         self.assertAlmostEqual(result, ['Math Error: sec(1.5707963267948966) is undefined'])
@@ -739,29 +684,26 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('sin((pi/2) radians)')
         self.assertAlmostEqual(result, 1)
 
-        result = self.calculator.evaluate('sin(90 degree)+cos(90 degree)+sin(1+2 degree)+sin(1+2+(3+4) degree)+cos(sin(90 degree)+cos(-90 degree) degree)')
+        result = self.calculator.evaluate(
+            'sin(90 degree)+cos(90 degree)+sin(1+2 degree)+sin(1+2+(3+4) degree)+cos(sin(90 degree)+cos(-90 degree) degree)')
         self.assertAlmostEqual(result, 2.225831829)
 
-        result = self.calculator.evaluate('sin(pi/2 radians)+cos(pi/2 radians)+sin(1+2 degree)+sin(1+2+(3+4) degree)+cos(sin(pi/2 radians)+cos(-pi/2 radians) degree)')
+        result = self.calculator.evaluate(
+            'sin(pi/2 radians)+cos(pi/2 radians)+sin(1+2 degree)+sin(1+2+(3+4) degree)+cos(sin(pi/2 radians)+cos(-pi/2 radians) degree)')
         self.assertAlmostEqual(result, 2.225831829)
 
-        result = self.calculator.evaluate('ln(e)+log(10)+log2(2)+sin(pi/2 radians)+cos(pi/2 radians)+sin(1+2 degree)+sin(1+2+(3+4) degree)+cos(sin(pi/2 radians)+cos(-pi/2 radians) degree)')
+        result = self.calculator.evaluate(
+            'ln(e)+log(10)+log2(2)+sin(pi/2 radians)+cos(pi/2 radians)+sin(1+2 degree)+sin(1+2+(3+4) degree)+cos(sin(pi/2 radians)+cos(-pi/2 radians) degree)')
         self.assertAlmostEqual(result, 5.225831829)
 
-
-
     def test_evaluate_error(self):
-
         ##Math Error: Division By Zero
-
-
 
         result = self.calculator.evaluate('5/(1-1)')
         self.assertEqual(result, ['Math Error: Division by zero at 5.0/0'])
 
         result = self.calculator.evaluate('(5 + 2) / ((3 - 1) * (4 - 4))')
         self.assertEqual(result, ['Math Error: Division by zero at 7.0/0'])
-
 
         result = self.calculator.evaluate('sec(90)')
         self.assertEqual(result, ['Math Error: sec(90.0) is undefined'])
@@ -771,8 +713,6 @@ class CalculatorTestCase(unittest.TestCase):
 
         result = self.calculator.evaluate('1.000/0')
         self.assertEqual(result, ['Math Error: Division by zero at 1.000/0'])
-
-
 
         result = self.calculator.evaluate('sqrt(-1)')
         self.assertEqual(result, ["Math Error: Square Root Of A Negative Number"])
@@ -786,13 +726,10 @@ class CalculatorTestCase(unittest.TestCase):
         result = self.calculator.evaluate('sin(0)^0')
         self.assertEqual(result, 1)
 
-
-
         ##Syntaxt Error
 
         result = self.calculator.evaluate('1+/1')
         self.assertEqual(result, ['Syntax Error : Invalid Operators 1+/'])
-
 
         result = self.calculator.evaluate('(-2')
         self.assertEqual(result, ['SyntaxError: Missing Closing Parentheses'])
@@ -819,7 +756,7 @@ class CalculatorTestCase(unittest.TestCase):
         self.assertEqual(result, ['Syntax Error : Invalid Operators 1?2?3'])
 
         result = self.calculator.evaluate('2@3')
-        self.assertEqual(result,['Syntax Error: Unsupported Key @'])
+        self.assertEqual(result, ['Syntax Error: Unsupported Key @'])
 
         result = self.calculator.evaluate('x + 5')
         self.assertEqual(result, ['Syntax Error: Invalid Input x'])
@@ -828,7 +765,6 @@ class CalculatorTestCase(unittest.TestCase):
 
         result = self.calculator.evaluate(123)
         self.assertEqual(result, ['Invalid Input Type Error'])
-
 
         result = self.calculator.evaluate('log(0)')
         self.assertEqual(result, ['Math Error: logarithm of zero'])

@@ -2,6 +2,13 @@ from .base import IReporter
 from .formatter.floor import Floor
 from .formatter.ceil import Ceil
 from .formatter.width import WidthHandler
+from .formatter.align import AlignHandler
+from .formatter.fill import FillHandler
+from .formatter.grouping_option import GroupingOptionHandler
+from .formatter.pad import PadHandler
+from .formatter.precision import PrecisionHandler
+from .formatter.sign import SignHandler
+from .formatter.type import TypeHandler
 from .formatter.default import Default
 import regex as re
 
@@ -13,37 +20,43 @@ class Formatter(IReporter):
         self.ceil = Ceil()
         self.default = Default()
         self.width_handler = WidthHandler()
-
-
-
+        self.align = AlignHandler()
+        self.fill = FillHandler()
+        self.grouping_option = GroupingOptionHandler()
+        self.pad = PadHandler()
+        self.precision = PrecisionHandler()
+        self.sign = SignHandler()
+        self.type = TypeHandler()
 
     def report(self, template):
 
-        format_pattern = r'(?![}])(\{(\{((?:[^{}]|(?2))*)\:([^{}]*)\})\})(?![}])'
+        format_pattern = r'(?![}])(\{(\{((?:[^{}]|(?2))*)\:(.*)\})\})(?![}])'
+##        template, format_class_list = self.get_format_list(template)
 
         matches = re.findall(format_pattern, template)
 
         for match in matches:
             value = match[2]
-            format_spec  = match[3]
+            format_spec = match[3]
 
-            if re.sub(r'[\s\-\.]','',value).isdigit():
+            if re.sub(r'[\s\-\.]', '', value).isdigit():
                 value = int(value) if value.endswith('.0') or '.' not in value else float(value)
+
             try:
-               replacement = format(value,format_spec)
+                replacement = format(value, format_spec)
             except ValueError:
 
-                condition,format_specs = self.process(format_spec)
+                condition, format_specs = self.process(format_spec, format_class_list)
                 format_pattern = '{{value}:{fill}{align}{sign}{pad}{width}{grouping_option}{precision}{type}}'
-                resutl = self.width_handler.handle(value,condition,format_specs,format_pattern)
-##                self.floor.format()
 
-                replacement = ''
+                default_format_value, format_specs = self.width_handler.handle(value, condition, format_specs,format_pattern)
 
+                result = self.floor.format(default_format_value, condition, format_specs)
 
-            pattern =r'({)\s*'+re.escape(match[1])+r'\s*(})'
-            template = re.sub(pattern, replacement , template)
+                replacement = result
 
+            pattern = r'({)\s*' + re.escape(match[1]) + r'\s*(})'
+            template = re.sub(pattern, replacement, template)
 
         return self.successor.report(template)
 
@@ -52,17 +65,22 @@ class Formatter(IReporter):
         self.floor.set_successor(self.ceil)
         self.ceil.set_successor(self.default)
 
-
-        self.width_handler.set_successor(self.default)
+        self.width_handler.set_successor(self.align)
+        self.align.set_successor(self.fill)
+        self.fill.set_successor(self.grouping_option)
+        self.grouping_option.set_successor(self.pad)
+        self.pad.set_successor(self.precision)
+        self.precision.set_successor(self.sign)
+        self.sign.set_successor(self.type)
+        self.type.set_successor(self.default)
 
     def set_data(self, data):
         pass
 
+    def process(self, format_spec, format_class_list):
 
-    def process(self,format_spec):
-        format_list = {'f2': {'fill' : '0' , 'align' : 'left', 'sign': '+', 'pad' : '0' ,'width' : 10, 'grouping_option' : ',' ,'precision' : '.1' ,'type' : 'b'} ,'w2' :{'width' : 10}}
-        matches = re.split(',',format_spec)
-        condition = re.search(r'c(\(((?>[^()]+|(?1))*)\))',format_spec)
+        matches = re.split(',', format_spec)
+        condition = re.search(r'c(\(((?>[^()]+|(?1))*)\))', format_spec)
 
         format_spec_list = matches
         format_specs = {}
@@ -70,7 +88,39 @@ class Formatter(IReporter):
             condition = condition[2]
             format_spec_list = matches[1:]
         for key in format_spec_list:
-            format_specs.update(format_list[key])
+            format_specs.update(format_class_list[key])
+
+        return condition, format_specs
+
+    def get_format_list(self, template):
+
+        format_classes = {}
+
+        format_tags = re.findall(r'<format>([\s\S]*?)<\/format>', template)
+        for tag in format_tags:
+            format_class_matches = re.findall(r'((\w+)\s*=\s*({(?:[^{}]|(?3))*}))', tag)
+            for format_class in format_class_matches:
+                key = format_class[1]
+                value = format_class[2]
+                format_classes[key] = eval(value)
+        template = re.sub(r'\n?<format>([\s\S]*?)<\/format>','',template)
+
+        pattern = r'({{.*?(format\s*=\s*(\{((?:[^{}]|(?3))*)\})).*}})'
+
+        matches = re.findall(pattern,template)
+        i= 0
+        for match in matches:
+            key = f'c{i}'
+            value = match[2]
+            format_classes[key] = eval(value)
+
+            replacement = re.sub(re.escape(match[1]),key,match[0])
+
+            template = re.sub(re.escape(match[0]),replacement,template)
+
+            i = i+1
 
 
-        return condition,format_specs
+
+
+        return template,format_classes
